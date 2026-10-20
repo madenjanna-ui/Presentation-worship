@@ -16,7 +16,16 @@ nav a{white-space:nowrap;text-decoration:none;padding:8px 13px;border-radius:999
 main{max-width:1120px;margin:auto;padding:22px}.section{padding:38px 0;scroll-margin-top:70px}.eyebrow{color:var(--blue);font-weight:750;text-transform:uppercase;letter-spacing:.12em;font-size:.75rem}h2{font-size:clamp(1.65rem,4vw,2.5rem);line-height:1.18;color:var(--navy);margin:.35rem 0 1rem}h3{color:var(--navy);margin:.2rem 0 .5rem}
 .lead{font-size:1.08rem;color:#455b6a;max-width:800px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{background:white;border:1px solid #e1e7eb;border-radius:18px;padding:20px;box-shadow:0 8px 24px #102a4308}.metric{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;line-height:1.2;color:var(--blue);letter-spacing:-.04em}.label{font-size:.9rem;color:var(--muted)}.source{font-size:.82rem;margin-top:10px}.source a{font-weight:650}
 .chart-wrap{background:white;border:1px solid #e1e7eb;border-radius:18px;padding:18px;overflow:hidden}.chart-head{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}.chart-head p{margin:.2rem 0;color:var(--muted);font-size:.9rem}.chart{width:100%;height:auto;display:block;min-height:240px}.chart text{font-family:inherit;fill:#657786;font-size:12px}.chart .line{fill:none;stroke:#1f5f8b;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart .dot{fill:#d8ad55;stroke:white;stroke-width:2;cursor:pointer}.chart .gridline{stroke:#e8edf0;stroke-width:1}.chart .axis{stroke:#bdcbd4;stroke-width:1}
-.chart-caption{font-size:.84rem;color:var(--muted);margin-top:10px}.timeline{position:relative;margin:26px 0 0 8px;padding-left:27px;border-left:2px solid #c8dbe5}.event{position:relative;padding:0 0 27px 12px}.event:before{content:"";position:absolute;left:-36px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid var(--paper)}.year{font-size:.82rem;letter-spacing:.08em;color:var(--blue);font-weight:800}.event p{margin:.25rem 0}.tag{display:inline-block;background:#e6f0f5;color:#17496a;padding:3px 9px;border-radius:999px;font-size:.78rem;font-weight:700}
+.chart-caption{font-size:.84rem;color:var(--muted);margin-top:10px}
+.controls{display:grid;grid-template-columns:auto minmax(170px,1fr) auto minmax(150px,1fr);gap:9px 12px;align-items:center;margin:18px 0}
+.controls label{font-size:.86rem;font-weight:700;color:var(--navy)}
+.controls select{min-width:0;width:100%;border:1px solid #cbd8e0;background:#fff;border-radius:10px;padding:10px;color:var(--ink);font:inherit}
+.chart-scroll{overflow-x:auto;overscroll-behavior-x:contain}
+.chart-scroll .chart{min-width:680px}
+.chart .dot:focus{outline:none;stroke:#102a43;stroke-width:4}
+.chart-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
+@media(max-width:620px){.controls{grid-template-columns:1fr 1fr}.controls label{align-self:end}.chart-scroll .chart{min-width:760px}}
+.timeline{position:relative;margin:26px 0 0 8px;padding-left:27px;border-left:2px solid #c8dbe5}.event{position:relative;padding:0 0 27px 12px}.event:before{content:"";position:absolute;left:-36px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid var(--paper)}.year{font-size:.82rem;letter-spacing:.08em;color:var(--blue);font-weight:800}.event p{margin:.25rem 0}.tag{display:inline-block;background:#e6f0f5;color:#17496a;padding:3px 9px;border-radius:999px;font-size:.78rem;font-weight:700}
 .notice{background:#fff8e8;border:1px solid #eed8a5;border-radius:14px;padding:16px 18px;color:#654d1d}.notice strong{color:#4d3912}.sources-list{padding-left:1.2rem}.sources-list li{margin:.65rem 0}.pill{display:inline-block;border:1px solid #d4e0e7;padding:7px 11px;border-radius:999px;margin:4px 4px 0 0;font-size:.84rem;background:white}
 footer{background:var(--navy);color:#dce7ee;padding:32px max(22px,calc((100vw - 1120px)/2));font-size:.9rem}footer a{color:#f0d69b}
 button{border:0;border-radius:999px;padding:10px 16px;background:var(--blue);color:white;font:inherit;font-weight:700;cursor:pointer}button:hover{background:var(--navy)}.small{font-size:.84rem;color:var(--muted)}
@@ -51,9 +60,31 @@ button{border:0;border-radius:999px;padding:10px 16px;background:var(--blue);col
   <div class="eyebrow">02 · Динамика</div><h2>Как менялось число возвещателей</h2>
   <p class="lead">На графике представлены отдельные опубликованные контрольные точки. Это не полный ежегодный ряд: точки не соединяют пропущенные годы, чтобы не создавать впечатление, будто отсутствующие данные известны.</p>
   <div class="chart-wrap">
-    <div class="chart-head"><div><h3>Высшее число возвещателей</h3><p>Выберите точку, чтобы увидеть значение и источник.</p></div><span class="tag">Проверенные точки</span></div>
-    <svg id="publisherChart" class="chart" viewBox="0 0 900 360" role="img" aria-label="График исторических значений числа возвещателей"></svg>
-    <div id="chartDetail" class="chart-caption" aria-live="polite">Выберите точку на графике.</div>
+    <div class="chart-head">
+      <div><h3 id="chartTitle">Высшее число возвещателей</h3><p id="chartSubtitle">Нажмите на точку, чтобы открыть значение и источник.</p></div>
+      <span class="tag">Интерактивный график</span>
+    </div>
+    <div class="controls" aria-label="Настройки графика">
+      <label for="metricSelect">Показатель</label>
+      <select id="metricSelect">
+        <option value="publishers">Число возвещателей</option>
+        <option value="baptized">Крестившиеся</option>
+        <option value="memorial">Посещаемость Вечери воспоминания</option>
+        <option value="studies">Изучения Библии в месяц</option>
+        <option value="congregations">Число собраний</option>
+        <option value="pioneers">Пионеры в месяц</option>
+      </select>
+      <label for="periodSelect">Период</label>
+      <select id="periodSelect">
+        <option value="all">Все доступные годы</option>
+        <option value="1950">С 1950 года</option>
+        <option value="2000">С 2000 года</option>
+        <option value="2015">С 2015 года</option>
+      </select>
+    </div>
+    <div class="chart-scroll"><svg id="publisherChart" class="chart" viewBox="0 0 900 360" role="img" aria-label="Интерактивный график статистики"></svg></div>
+    <div class="chart-caption" id="chartDetail" aria-live="polite">Выберите точку на графике.</div>
+    <div class="chart-actions"><button id="resetZoom" type="button">Сбросить период</button><span class="small">На телефоне график можно прокручивать по горизонтали.</span></div>
   </div>
   <div class="notice" style="margin-top:16px"><strong>Как читать график:</strong> в ранние десятилетия методы учёта менялись. Исторические значения следует читать вместе с пояснениями в публикациях, а не как полностью однородный статистический ряд.</div>
 </section>
@@ -78,7 +109,7 @@ button{border:0;border-radius:999px;padding:10px 16px;background:var(--blue);col
     <article class="card"><h3>Собрания</h3><p>Количество собраний во всём мире. Изменение числа собраний не обязательно соответствует изменению числа возвещателей.</p></article>
     <article class="card"><h3>Пионеры</h3><p>В отчётах указывается среднемесячное число пионеров. Не следует суммировать месячные значения как число уникальных людей.</p></article>
   </div>
-  <p class="small">В эту версию включены подтверждённые исторические примеры и полный набор показателей за 2025 год. Графики крещений, Вечери, изучений, собраний и пионеров за 1900–2025 годы нужно наполнять только после проверки соответствующих годовых публикаций.</p>
+  <p class="small">В эту версию включены подтверждённые исторические примеры и полный набор показателей за 2025 год. Для крещений, Вечери, изучений, собраний и пионеров показаны только выбранные годы, для которых в этом прототипе внесены значения; полная ежегодная база за 1900–2025 годы ещё требует проверки.</p>
 </section>
 <section id="method" class="section">
   <div class="eyebrow">05 · Прозрачность</div><h2>Как проверяются данные</h2>
@@ -104,48 +135,107 @@ button{border:0;border-radius:999px;padding:10px 16px;background:var(--blue);col
 </main>
 <footer><strong>Всемирная проповедь в цифрах и событиях</strong><br>Информационная презентация на основе опубликованных материалов WOL и jw.org.<br><span style="color:#b9cbd7">Перед использованием в публичном показе проверяйте актуальность отчётов и контекст каждой статистической цифры.</span></footer>
 <script>
-const points=[
- {year:1935,value:56153,source:"Исторический материал WOL: «Вехи современной истории»."},
- {year:1940,value:96418,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1945,value:156299,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1950,value:373430,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1955,value:642929,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1960,value:916332,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1965,value:1109806,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1970,value:1483430,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1975,value:2179256,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1980,value:2272278,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1985,value:3024131,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:1992,value:4472787,source:"Исторический ряд, опубликованный в материалах WOL."},
- {year:2000,value:6035564,source:"Всемирный отчёт за 2000 год."},
- {year:2010,value:7508050,source:"Всемирный отчёт за 2010 год."},
- {year:2015,value:8220105,source:"Всемирный отчёт за 2015 год."},
- {year:2020,value:8695808,source:"Всемирный отчёт за 2020 год."},
- {year:2021,value:8686980,source:"Всемирный отчёт за 2021 год."},
- {year:2022,value:8699048,source:"Всемирный отчёт за 2022 год."},
- {year:2023,value:8816562,source:"Всемирный отчёт за 2023 год."},
- {year:2024,value:9043460,source:"Всемирный отчёт за 2024 год."},
- {year:2025,value:9205326,source:"Всемирный отчёт за 2025 год.",url:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102025416"}
-];
-const svg=document.getElementById('publisherChart'), detail=document.getElementById('chartDetail');
-const W=900,H=360,L=70,R=24,T=20,B=52, max=10000000;
-const x=i=>L+i*(W-L-R)/(points.length-1), y=v=>H-B-(v/max)*(H-T-B);
-let s='';
-[0,2500000,5000000,7500000,10000000].forEach(v=>{
- const yy=y(v); s+=`<line class="gridline" x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}"/><text x="${L-10}" y="${yy+4}" text-anchor="end">${v===0?'0':(v/1000000).toFixed(v%1000000?1:0)+' млн'}</text>`;
-});
-s+=`<line class="axis" x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}"/>`;
-const path=points.map((p,i)=>(i?'L':'M')+x(i)+','+y(p.value)).join(' ');
-s+=`<path class="line" d="${path}"/>`;
-points.forEach((p,i)=>{
- const cx=x(i),cy=y(p.value);
- s+=`<circle class="dot" tabindex="0" role="button" aria-label="${p.year}: ${p.value.toLocaleString('ru-RU')}" data-index="${i}" cx="${cx}" cy="${cy}" r="5.5"/>`;
- if(i%2===0||i===points.length-1) s+=`<text x="${cx}" y="${H-B+24}" text-anchor="middle">${p.year}</text>`;
-});
-svg.innerHTML=s;
-function selectPoint(i){const p=points[i];detail.innerHTML=`<strong>${p.year} год:</strong> ${p.value.toLocaleString('ru-RU')} возвещателей. ${p.source} <a href="${p.url||'https://wol.jw.org/ru/wol/d/r2/lp-u/1101993045'}" target="_blank" rel="noopener">Открыть источник ↗</a>`;}
-svg.querySelectorAll('.dot').forEach(dot=>{dot.addEventListener('click',()=>selectPoint(+dot.dataset.index));dot.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectPoint(+dot.dataset.index)}})});
-selectPoint(points.length-1);
+const sourceLinks = {
+  historical:"https://wol.jw.org/ru/wol/d/r2/lp-u/1101993045",
+  milestones:"https://wol.jw.org/ru/wol/d/r2/lp-u/1101993046",
+  2000:"https://wol.jw.org/ru/wol/d/r2/lp-u/302001003",
+  2010:"https://wol.jw.org/ru/wol/d/r2/lp-u/302011017",
+  2015:"https://wol.jw.org/ru/wol/d/r2/lp-u/302016039",
+  2017:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102017491",
+  2018:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102018986",
+  2019:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102019611",
+  2020:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102020991",
+  2021:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102021371",
+  2022:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102022816",
+  2023:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102023816",
+  2024:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102024816",
+  2025:"https://wol.jw.org/ru/wol/d/r2/lp-u/1102025416"
+};
+const data = {
+ publishers:{title:"Высшее число возвещателей",unit:"возвещателей",format:"integer",points:[
+ [1935,56153,"Историческая статистическая точка"],[1940,96418],[1945,156299],[1950,373430],[1955,642929],[1960,916332],[1965,1109806],[1970,1483430],[1975,2179256],[1980,2272278],[1985,3024131],[1992,4472787],[2000,6035564],[2010,7508050],[2015,8220105],[2016,8340847],[2017,8457107],[2018,8579909],[2019,8683117],[2020,8695808],[2021,8686980],[2022,8699048],[2023,8816562],[2024,9043460],[2025,9205326]]},
+ baptized:{title:"Крестившиеся за год",unit:"человек",format:"integer",points:[
+ [2017,284212],[2018,281744],[2019,303866],[2020,241994],[2021,171393],[2022,145552],[2023,269517],[2024,296267],[2025,304643]]},
+ memorial:{title:"Присутствовавшие на Вечере воспоминания",unit:"присутствовавших",format:"integer",points:[
+ [2017,20175477],[2018,20329317],[2019,20919041],[2020,17844773],[2021,21367603],[2022,19721672],[2023,20461767],[2024,21119442],[2025,20635015]]},
+ studies:{title:"Среднее число изучений Библии в месяц",unit:"изучений в месяц",format:"integer",points:[
+ [2018,10079709],[2020,7705765],[2021,5908167],[2025,7603182]]},
+ congregations:{title:"Число собраний",unit:"собраний",format:"integer",points:[
+ [2017,120053],[2018,119954],[2019,119712],[2020,120387],[2021,119297],[2022,117960],[2023,118177],[2024,118767],[2025,119652]]},
+ pioneers:{title:"Среднемесячное число пионеров",unit:"пионеров в месяц",format:"integer",points:[
+ [2017,1249946],[2018,1267808],[2019,1277738],[2020,1299619],[2021,1350138],[2022,1489252],[2023,1570906],[2024,1679026],[2025,1743567]]}
+};
+const svg=document.getElementById('publisherChart');
+const detail=document.getElementById('chartDetail');
+const metricSelect=document.getElementById('metricSelect');
+const periodSelect=document.getElementById('periodSelect');
+const titleEl=document.getElementById('chartTitle');
+const subtitleEl=document.getElementById('chartSubtitle');
+let selectedMetric='publishers';
+let selectedYear=2025;
+const fmt=n=>n.toLocaleString('ru-RU');
+function sourceFor(year, metric){
+ if(year>=2017) return sourceLinks[year] || sourceLinks[2025];
+ if(year===2015) return sourceLinks[2015];
+ if(year===2010) return sourceLinks[2010];
+ if(year===2000) return sourceLinks[2000];
+ if(year>=1935) return sourceLinks.historical;
+ return sourceLinks.milestones;
+}
+function renderChart(){
+ const series=data[selectedMetric];
+ const minYear=periodSelect.value==='all'?0:Number(periodSelect.value);
+ const pts=series.points.filter(p=>p[0]>=minYear);
+ titleEl.textContent=series.title;
+ subtitleEl.textContent=`Показаны ${pts.length} опубликованных точек. Отсутствующие годы не интерполируются.`;
+ const W=Math.max(900,pts.length*42), H=360,L=78,R=28,T=24,B=56;
+ const max=Math.max(...pts.map(p=>p[1]))*1.12;
+ const minVal=0;
+ const x=i=>L+(pts.length<=1?0:i*(W-L-R)/(pts.length-1));
+ const y=v=>H-B-((v-minVal)/(max-minVal))*(H-T-B);
+ let s='';
+ for(let k=0;k<=4;k++){
+   const val=max*k/4, yy=y(val);
+   s+=`<line class="gridline" x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}"/><text x="${L-10}" y="${yy+4}" text-anchor="end">${val>=1000000?(val/1000000).toLocaleString('ru-RU',{maximumFractionDigits:1})+' млн':Math.round(val).toLocaleString('ru-RU')}</text>`;
+ }
+ s+=`<line class="axis" x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}"/>`;
+ // Separate line segments at large year gaps so no line suggests invented yearly values.
+ let segments=[], segment=[];
+ pts.forEach((p,i)=>{if(segment.length && p[0]-segment[segment.length-1][0]>3){segments.push(segment);segment=[];}segment.push(p);});
+ if(segment.length)segments.push(segment);
+ segments.forEach(seg=>{
+   if(seg.length>1){
+     const d=seg.map(p=>{const i=pts.indexOf(p);return (i===seg.indexOf(p)?'M':'L')+x(i)+','+y(p[1]);}).join(' ');
+     s+=`<path class="line" d="${d}"/>`;
+   }
+ });
+ pts.forEach((p,i)=>{
+   const cx=x(i),cy=y(p[1]);
+   s+=`<circle class="dot" tabindex="0" role="button" aria-label="${p[0]}: ${fmt(p[1])}" data-year="${p[0]}" data-value="${p[1]}" cx="${cx}" cy="${cy}" r="${p[0]===selectedYear?7:5.5}"/>`;
+   const step=pts.length>16?Math.ceil(pts.length/12):1;
+   if(i%step===0||i===pts.length-1)s+=`<text x="${cx}" y="${H-B+25}" text-anchor="middle">${p[0]}</text>`;
+ });
+ svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+ svg.innerHTML=s;
+ svg.querySelectorAll('.dot').forEach(dot=>{
+   const activate=()=>showDetail(Number(dot.dataset.year),Number(dot.dataset.value));
+   dot.addEventListener('click',activate);
+   dot.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate();}});
+ });
+ if(!pts.some(p=>p[0]===selectedYear)) selectedYear=pts.length?pts[pts.length-1][0]:null;
+ if(selectedYear!==null){const p=pts.find(p=>p[0]===selectedYear)||pts[pts.length-1];if(p)showDetail(p[0],p[1]);}
+ else detail.textContent='Для выбранного периода пока нет подтверждённых точек.';
+}
+function showDetail(year,value){
+ selectedYear=year;
+ const series=data[selectedMetric],url=sourceFor(year,selectedMetric);
+ detail.innerHTML=`<strong>${year} год:</strong> ${fmt(value)} ${series.unit}. <a href="${url}" target="_blank" rel="noopener">Открыть публикацию WOL ↗</a><br><span class="small">Источник подтверждает публикацию отчёта; для ранних исторических точек проверьте контекст и методику подсчёта в самой статье.</span>`;
+ svg.querySelectorAll('.dot').forEach(d=>d.setAttribute('r',Number(d.dataset.year)===year?7:5.5));
+}
+metricSelect.addEventListener('change',()=>{selectedMetric=metricSelect.value;selectedYear=null;renderChart();});
+periodSelect.addEventListener('change',()=>{selectedYear=null;renderChart();});
+document.getElementById('resetZoom').addEventListener('click',()=>{periodSelect.value='all';selectedYear=null;renderChart();});
+renderChart();
 </script>
 </body>
 </html>
